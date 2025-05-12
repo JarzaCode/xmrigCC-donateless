@@ -20,7 +20,7 @@ jobs:
       - name: Set up dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake git libuv1-dev libssl-dev libhwloc-dev libcurl4-openssl-dev automake autoconf libtool
+          sudo apt-get install -y g++-aarch64-linux-gnu build-essential cmake git libuv1-dev libssl-dev libhwloc-dev libcurl4-openssl-dev automake autoconf libtool
 
       - name: Clone the XMRig Repository
         run: |
