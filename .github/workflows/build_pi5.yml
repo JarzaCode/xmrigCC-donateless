@@ -48,7 +48,7 @@ jobs:
           tar -czvf xmrig-rpi5-arm64.tar.gz -C output .
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: xmrig-rpi5-arm64
           path: xmrig-rpi5-arm64.tar.gz
