@@ -38,7 +38,10 @@ jobs:
             -DNEON=ON \
             -DOPENCL=OFF \
             -DCUDA=OFF \
-            -DCMAKE_CXX_FLAGS="-mcpu=cortex-a76 -mtune=cortex-a76 -march=armv8-a -O3"
+            -DCMAKE_C_COMPILER=aarch64-linux-gnu-gcc \
+            -DCMAKE_CXX_COMPILER=aarch64-linux-gnu-g++ \
+            -DCMAKE_C_FLAGS="-mcpu=cortex-a76 -mtune=cortex-a76 -O3" \
+            -DCMAKE_CXX_FLAGS="-mcpu=cortex-a76 -mtune=cortex-a76 -O3"
           make -j$(nproc)
 
       - name: Package the binary
