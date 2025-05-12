@@ -1,0 +1,69 @@
+name: Build XMRig for Raspberry Pi 5 (ARMv8-A) and Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger this workflow only on tag pushes
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        architecture: [arm64]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake git libuv1-dev libssl-dev libhwloc-dev libcurl4-openssl-dev automake autoconf libtool
+
+      - name: Set up CMake
+        run: |
+          sudo apt-get install -y cmake
+
+      - name: Clone the XMRig Repository
+        run: |
+          git clone https://github.com/xmrig/xmrigCC.git
+          cd xmrigCC
+
+      - name: Build XMRig for ARMv8-A (Raspberry Pi 5)
+        run: |
+          cd xmrigCC
+          mkdir build
+          cd build
+          cmake .. \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DARMV8=ON \
+            -DNEON=ON \
+            -DOPENCL=OFF \
+            -DCUDA=OFF \
+            -DCMAKE_CXX_FLAGS="-mcpu=cortex-a76 -mtune=cortex-a76 -mfpu=neon-fp-armv8 -march=armv8-a -O3"
+          make -j$(nproc)
+
+      - name: Package the binary and prepare for release
+        run: |
+          mkdir -p bundle
+          cp src/config.json build/xmrigMiner bundle/
+          tar -czvf xmrig-raspberrypi-arm64.tar.gz -C bundle .
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref }}  # Use the tag name (e.g., v1.0.0)
+          release_name: "Release ${{ github.ref }}"  # Optional, you can customize the name
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GITHUB_TOKEN }}  # GitHub token to authenticate
+
+      - name: Upload binary to release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}  # Get the upload URL from the create-release step
+          asset_path: xmrig-raspberrypi-arm64.tar.gz
+          asset_name: xmrig-raspberrypi-arm64.tar.gz
+          asset_content_type: application/gzip
