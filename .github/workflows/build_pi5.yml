@@ -27,8 +27,8 @@ jobs:
 
       - name: Clone the XMRig Repository
         run: |
-          git clone https://github.com/xmrig/xmrigCC.git
-          cd xmrigCC
+          git clone github.com/JarzaCode/xmrigCC-donateless.git
+          cd xmrigCC-donateless
 
       - name: Build XMRig for ARMv8-A (Raspberry Pi 5)
         run: |
