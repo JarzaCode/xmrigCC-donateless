@@ -2,9 +2,11 @@ name: Build XMRig for Raspberry Pi 5 (ARMv8-A) and Release
 
 on:
   push:
-    tags:
-      - 'v*'  # Trigger this workflow only on tag pushes
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
   workflow_dispatch:
+
 
 jobs:
   build:
