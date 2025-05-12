@@ -38,7 +38,7 @@ jobs:
             -DNEON=ON \
             -DOPENCL=OFF \
             -DCUDA=OFF \
-            -DCMAKE_CXX_FLAGS="-mcpu=cortex-a76 -mtune=cortex-a76 -mfpu=neon-fp-armv8 -march=armv8-a -O3"
+            -DCMAKE_CXX_FLAGS="-mcpu=cortex-a76 -mtune=cortex-a76 -march=armv8-a -O3"
           make -j$(nproc)
 
       - name: Package the binary
